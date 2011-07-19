@@ -1,0 +1,28 @@
+Consumption Junction - A Threaded AMQP Consumer Library
+
+Consumption Junction makes it easy to create and configure "server" processes, or be embedded in an existing application, to run multiple workers consuming messages from an AMQP server. Consumption Junction uses threads to run each worker in a separate thread allowing you to utilize all of the cores in your physical/virtual server using a single process. Consumption Junction monitors your worker threads and will restart dead workers, and records statistics on them.
+
+Consumption Junction is a layer of abstraction above AMQP inspired by Java Enterprise Edition Message Driven Beans, but don't be put off by that.
+
+Requirements
+
+- A running AMQP server, such as RabbitMQ
+- JRuby (Consumption Junction requires JRuby for best performance. MRI and Rubinius will not take full advantage of Consumption Junction due to the Global Interpreter Lock (GIL) in these Ruby implementations. Consumption Junction is currently only being actively developed on JRuby.)
+
+Configuration
+
+Consumption Junction can be configured using a simple DSL
+
+require 'consumption_junction'
+
+module MyApp
+  class ConsumptionJunctionServer < ConsumptionJunction::Server
+    config.amqp_server_host 'localhost'
+    config.amqp_server_port '5672'
+    config.worker :signup_email_worker, :queue => 'new_signups_queue', :use_basic_ack => true, :count => 2
+    config.worker :new_order_acknowledgement_worker, :queue => 'new_order_queue', :use_basic_ack => true, :count => 10
+    config.worker :order_complete_email_worker, :queue => 'completed_order_queue', :use_basic_ack => true, :count => 10
+  end
+end
+
+MyApp::ConsumptionJunctionServer.start
