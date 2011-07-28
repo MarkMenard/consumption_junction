@@ -1,6 +1,6 @@
 Consumption Junction - A Threaded AMQP Consumer Library
 
-Consumption Junction makes it easy to create and configure "server" processes, or be embedded in an existing application, to run multiple workers consuming messages from an AMQP server. Consumption Junction uses threads to run each worker in a separate thread allowing you to utilize all of the cores in your physical/virtual server using a single process. Consumption Junction monitors your worker threads and will restart dead workers, and records statistics on them.
+Consumption Junction makes it easy to create and configure "server" processes, which can be embedded in an existing application, to run multiple workers consuming messages from an AMQP server using a single process. Consumption Junction uses threads to run each worker, allowing you to utilize all of the cores in your physical/virtual server using a single process. Consumption Junction monitors your worker threads and will restart dead workers (coming soon), and records statistics on them.
 
 Consumption Junction is a layer of abstraction above AMQP inspired by Java Enterprise Edition Message Driven Beans, but don't be put off by that.
 
@@ -25,4 +25,6 @@ module MyApp
   end
 end
 
-MyApp::ConsumptionJunctionServer.start
+runner = ConsumptionJunction::EmRunner.new(MyApp::ConsumptionJunctionServer)
+runner.start # This method blocks and doesn't return. To start the server asynchronously use runner.start!
+

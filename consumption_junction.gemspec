@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   # s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   
-  s.add_dependency 'active_support'
+  s.add_dependency 'activesupport'
   s.add_dependency 'amqp'
   s.add_dependency 'celluloid', '>= 0.2.1'
   s.add_dependency 'eventmachine'
