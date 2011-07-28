@@ -5,8 +5,8 @@ require "consumption_junction/version"
 Gem::Specification.new do |s|
   s.name        = "consumption_junction"
   s.version     = ConsumptionJunction::VERSION
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Enable Labs"]
+  s.email       = ["info@enablelabs.com"]
   s.homepage    = ""
   s.summary     = %q{TODO: Write a gem summary}
   s.description = %q{TODO: Write a gem description}
@@ -14,7 +14,14 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "consumption_junction"
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.test_files    = `git ls-files -- {spec,features}/*`.split("\n")
+  # s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+  
+  s.add_dependency 'active_support'
+  s.add_dependency 'amqp'
+  s.add_dependency 'celluloid', '>= 0.2.1'
+  s.add_dependency 'eventmachine'
+  
+  s.add_development_dependency('carrot')
 end
