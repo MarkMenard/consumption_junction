@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Enable Labs"]
   s.email       = ["info@enablelabs.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A library for managing threaded AMQP consumers.}
+  s.description = %q{A library for managing threaded AMQP consumers.}
 
   s.rubyforge_project = "consumption_junction"
 
