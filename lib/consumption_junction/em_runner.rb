@@ -27,7 +27,7 @@ class ConsumptionJunction::EmRunner
       puts "Setting up subcriptions for #{worker_config}"
       worker_config.worker_count.times do
         
-        message_processor = ConsumptionJunction::MessageProcessor.supervise(worker_config.worker_class.to_s.classify.constantize)
+        message_processor_supervisor = ConsumptionJunction::MessageProcessor.supervise(worker_config.worker_class.to_s.classify.constantize)
         
         queue_channel = AMQP::Channel.new(amqp_connection)
         queue = queue_channel.queue(worker_config.queue, :durable => true)
@@ -35,7 +35,7 @@ class ConsumptionJunction::EmRunner
         queue.subscribe(:ack => worker_config.ack) do |metadata, payload|
 
           operation = lambda do
-            message_processor.process_message(payload)
+            message_processor_supervisor.actor.process_message(payload)
           end
 
           callback = lambda do |result|
