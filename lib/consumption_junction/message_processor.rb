@@ -4,21 +4,20 @@ class ConsumptionJunction::MessageProcessor
   attr_accessor :message_count, :worker_class
   
   def initialize (worker_class)
-    puts "[ ConsumptionJunction::MessageProcessor ] CREATE MessageProcessor for #{worker_class}"
+    log "[ ConsumptionJunction::MessageProcessor ] CREATE MessageProcessor for #{worker_class}"
     self.worker_class = worker_class
     self.message_count = 0
-    puts "[ ConsumptionJunction::MessageProcessor ] END initialize()"
+    log "[ ConsumptionJunction::MessageProcessor ] END initialize()"
   end
   
   def process_message (message)
-    puts "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
-    puts "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message #{message}"
+    log "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    log "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message #{message}"
     self.message_count = message_count + 1
-    puts "[ ConsumptionJunction::MessageProcessor ] INFO MessageProcessor #{self} count = #{message_count}"
+    log "[ ConsumptionJunction::MessageProcessor ] INFO MessageProcessor #{self} count = #{message_count}"
     result = build_worker.process_message(message)
-    puts "[ ConsumptionJunction::MessageProcessor ] result = #{result}"
-    puts "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message #{message}"
-    puts "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    log "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message result = #result for message = #{message}"
+    log "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
     result
   end
   
@@ -30,7 +29,7 @@ class ConsumptionJunction::MessageProcessor
     if defined? ::Rails
       ::Rails.logger.debug message
     else
-      puts message
+      log message
     end
   end
 end
