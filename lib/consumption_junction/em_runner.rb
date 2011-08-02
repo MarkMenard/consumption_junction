@@ -43,7 +43,7 @@ class ConsumptionJunction::EmRunner
           end
 
           callback = lambda do |result|
-            result == "SUCCEEDED" ? header.ack : header.reject(:requeue => true)
+            result == "SUCCEEDED" ? header.ack : header.reject(:requeue => worker_config.requeue_on_failure)
           end
 
           EventMachine.defer(operation, callback)

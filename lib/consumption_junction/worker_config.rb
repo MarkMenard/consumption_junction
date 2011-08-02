@@ -12,7 +12,11 @@ module ConsumptionJunction
     end
     
     def ack
-      options[:use_basic_ack] ? true : false
+      !!options[:use_basic_ack]
+    end
+    
+    def requeue_on_failure
+      !!options[:requeue_on_failure]
     end
     
     def worker
@@ -22,5 +26,6 @@ module ConsumptionJunction
     def worker_count
       options[:count]
     end
+        
   end
 end
