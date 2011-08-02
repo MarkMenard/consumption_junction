@@ -4,18 +4,19 @@ class ConsumptionJunction::MessageProcessor
   attr_accessor :message_count, :worker_class
   
   def initialize (worker_class)
-    log "CREATE MessageProcessor for #{worker_class}"
+    log "[ ConsumptionJunction::MessageProcessor ] CREATE MessageProcessor for #{worker_class}"
     self.worker_class = worker_class
     self.message_count = 0
+    log "[ ConsumptionJunction::MessageProcessor ] END initialize()"
   end
   
   def process_message (message)
     log "-+" * 25
-    log "BEGIN MessageProcessor#process_message #{message}"
+    log "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message #{message}"
     self.message_count = message_count + 1
-    log "INFO MessageProcessor #{self} count = #{message_count}"
+    log "[ ConsumptionJunction::MessageProcessor ] INFO MessageProcessor #{self} count = #{message_count}"
     build_worker.process_message(message)
-    log "END MessageProcessor#process_message #{message}"
+    log "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message #{message}"
     log "-+" * 25
   end
   
