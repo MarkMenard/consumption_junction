@@ -32,14 +32,18 @@ class ConsumptionJunction::EmRunner
         queue_channel = AMQP::Channel.new(amqp_connection)
         queue = queue_channel.queue(worker_config.queue, :durable => true)
 
-        queue.subscribe(:ack => worker_config.ack) do |metadata, payload|
+        queue.subscribe(:ack => worker_config.ack) do |header, payload|
 
           operation = lambda do
-            message_processor_supervisor.actor.process_message(payload)
+            begin
+              message_processor_supervisor.actor.process_message(payload)
+            rescue Exception => e
+              header.reject :requeue => true
+            end
           end
 
           callback = lambda do |result|
-            metadata.ack
+            header.ack
           end
 
           EventMachine.defer(operation, callback)
@@ -63,7 +67,7 @@ end
 #   queue_channel = AMQP::Channel.new(connection)
 #   queue = queue_channel.queue(QUEUE_NAME, :auto_delete => true)
 # 
-#   queue.subscribe(:ack => true) do |metadata, payload|
+#   queue.subscribe(:ack => true) do |header, payload|
 # 
 #     operation = lambda do
 #       sleep_time = rand(10) > 5 ? 5 : 0
@@ -74,7 +78,7 @@ end
 # 
 #     callback = lambda do |result|
 #       puts "Acking for listener #{i}"
-#       metadata.ack
+#       header.ack
 #       if counter.count == MESSAGE_COUNT
 #         EventMachine.stop { exit }
 #       end

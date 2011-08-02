@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'carrot'
-require 'celluloid'
 
 MESSAGE_COUNT = 20_000
 QUEUE_NAME = "example.queue.2"
