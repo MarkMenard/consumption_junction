@@ -15,9 +15,10 @@ class ConsumptionJunction::MessageProcessor
     puts "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message #{message}"
     self.message_count = message_count + 1
     puts "[ ConsumptionJunction::MessageProcessor ] INFO MessageProcessor #{self} count = #{message_count}"
-    build_worker.process_message(message)
+    result = build_worker.process_message(message)
     puts "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message #{message}"
     puts "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    result
   end
   
   def build_worker

@@ -38,12 +38,12 @@ class ConsumptionJunction::EmRunner
             begin
               message_processor_supervisor.actor.process_message(payload)
             rescue Exception => e
-              header.reject :requeue => true
+              "FAILED"
             end
           end
 
           callback = lambda do |result|
-            header.ack
+            result == "SUCCEEDED" ? header.ack : header.reject :requeue => true
           end
 
           EventMachine.defer(operation, callback)
@@ -58,38 +58,3 @@ class ConsumptionJunction::EmRunner
     server_config.worker_configs
   end
 end
-
-
-# puts "Connected to AMQP broker. Running #{AMQP::VERSION} version of the gem..."
-# 
-# 
-# (1..WORKER_COUNT).each do |i|
-#   queue_channel = AMQP::Channel.new(connection)
-#   queue = queue_channel.queue(QUEUE_NAME, :auto_delete => true)
-# 
-#   queue.subscribe(:ack => true) do |header, payload|
-# 
-#     operation = lambda do
-#       sleep_time = rand(10) > 5 ? 5 : 0
-#       sleep sleep_time
-#       puts "Listener #{i} received a message: #{payload}, and slept for #{sleep_time}"
-#       counter.increment
-#     end
-# 
-#     callback = lambda do |result|
-#       puts "Acking for listener #{i}"
-#       header.ack
-#       if counter.count == MESSAGE_COUNT
-#         EventMachine.stop { exit }
-#       end
-#     end
-# 
-#     EventMachine.defer(operation, callback)
-#   end
-# end
-# 
-# channel = AMQP::Channel.new(connection)
-# exchange = channel.direct("")
-# (1..MESSAGE_COUNT).each do |i|
-#   exchange.publish "Message #{i}", :routing_key => QUEUE_NAME
-# end
