@@ -12,9 +12,9 @@ class ConsumptionJunction::MessageProcessor
   
   def process_message (message)
     log "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
-    log "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message #{message}"
+    log "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message using #{worker_class.to_s} #{message}"
     self.message_count = message_count + 1
-    log "[ ConsumptionJunction::MessageProcessor ] INFO MessageProcessor #{self} count = #{message_count}"
+    log "[ ConsumptionJunction::MessageProcessor ] INFO #{to_s}"
     result = build_worker.process_message(message)
     log "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message result = #{result} for message = #{message}"
     log "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
@@ -27,9 +27,12 @@ class ConsumptionJunction::MessageProcessor
   
   def log (message)
     if defined? ::Rails
-      ::Rails.logger.debug message
+      ::Rails.logger.info message
     else
       log message
     end
   end
+  
+  def to_s
+    "#{self.class.to_s}< worker_class => #{worker_class.to_s}, message_count => #{message_count} >"
 end
