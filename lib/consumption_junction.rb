@@ -1,4 +1,3 @@
-require 'java'
 require 'celluloid'
 require 'amqp'
 require 'active_support/core_ext/string/inflections'
