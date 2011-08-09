@@ -30,6 +30,7 @@ class ConsumptionJunction::EmRunner
         message_processor_supervisor = ConsumptionJunction::MessageProcessor.supervise(worker_config.worker_class.to_s.classify.constantize)
         
         queue_channel = AMQP::Channel.new(amqp_connection)
+        queue_channel.prefetch(1)
         queue = queue_channel.queue(worker_config.queue, :durable => true)
 
         queue.subscribe(:ack => worker_config.ack) do |header, payload|
