@@ -35,4 +35,5 @@ class ConsumptionJunction::MessageProcessor
   
   def to_s
     "#{self.class.to_s}< worker_class => #{worker_class.to_s}, message_count => #{message_count} >"
+  end
 end
