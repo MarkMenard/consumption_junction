@@ -8,14 +8,22 @@ EventMachine.threadpool_size = 200
 require 'amqp'
 
 class MyWorker
-  def process_message (message)
-    puts "MyWorker#call #{message}"
+  def initialize (message)
+    @message = message
+  end
+  
+  def process_message
+    puts "MyWorker#call #{@message}"
   end
 end
 
 class OtherWorker
-  def process_message (message)
-    puts "OtherWorker: #{message}"
+  def initialize (message)
+    @message = message
+  end
+  
+  def process_message
+    puts "OtherWorker: #{@message}"
   end
 end
 

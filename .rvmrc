@@ -1,1 +1,1 @@
-rvm use jruby-1.6.0@consumption_junction
+rvm use jruby-1.6.0@consumption_junction --create
