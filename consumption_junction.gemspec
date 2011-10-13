@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   
   s.add_dependency 'activesupport'
+  s.add_dependency 'i18n'
   s.add_dependency 'amqp'
   s.add_dependency 'celluloid', '>= 0.2.1'
   s.add_dependency 'eventmachine'
   
-  s.add_development_dependency 'carrot'
   s.add_development_dependency 'rspec'
 end
