@@ -7,17 +7,13 @@ class ConsumptionJunction::MessageProcessor
     puts "[ ConsumptionJunction::MessageProcessor ] CREATE MessageProcessor for #{worker_class}"
     self.worker_class = worker_class
     self.message_count = 0
-    puts "[ ConsumptionJunction::MessageProcessor ] END initialize()"
   end
   
   def process_message (message)
-    puts "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
     puts "[ ConsumptionJunction::MessageProcessor ] BEGIN MessageProcessor#process_message using #{worker_class.to_s} #{message}"
     self.message_count = message_count + 1
-    puts "[ ConsumptionJunction::MessageProcessor ] INFO #{to_s}"
     result = build_worker(message).process_message
-    puts "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message result = #{result} for message = #{message}"
-    puts "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+    puts "[ ConsumptionJunction::MessageProcessor ] END MessageProcessor#process_message result = '#{result}' for message = '#{message}'"
     result
   end
   
