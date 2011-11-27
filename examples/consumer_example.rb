@@ -13,7 +13,8 @@ class MyWorker
   end
   
   def process_message
-    puts "MyWorker#call #{@message}"
+    sleep 0.02
+    puts "MyWorker#process_message #{@message}"
   end
 end
 
@@ -23,7 +24,7 @@ class OtherWorker
   end
   
   def process_message
-    puts "OtherWorker: #{@message}"
+    puts "OtherWorker#process_message #{@message}"
   end
 end
 

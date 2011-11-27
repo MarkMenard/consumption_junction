@@ -7,10 +7,16 @@ QUEUE_NAME = "example.queue.1"
 @queue = Carrot.queue(QUEUE_NAME, :durable => true)
 
 i = 0
+counter = lambda do
+  i = i + 1
+  i
+end
 
 while true
-  i= i + 1
-  puts "Publishing message #{i} on #{QUEUE_NAME}"
-  @queue.publish "Message #{i} for #{QUEUE_NAME}"
-  sleep 0.01
+  2000.times do
+    count = counter.call
+    puts "Publishing message #{count} on #{QUEUE_NAME}"
+    @queue.publish "Message #{count} for #{QUEUE_NAME}"
+  end
+  sleep 1
 end
