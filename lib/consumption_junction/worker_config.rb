@@ -1,9 +1,9 @@
 module ConsumptionJunction
   class WorkerConfig
-    attr_accessor :worker_class, :options
+    attr_accessor :worker_class_name, :options
     
-    def initialize (worker_class, options)
-      @worker_class = worker_class
+    def initialize (worker_class_name, options)
+      @worker_class_name = worker_class_name
       @options = options
     end
     
@@ -19,8 +19,12 @@ module ConsumptionJunction
       !!options[:requeue_on_failure]
     end
     
+    def worker_class
+      worker_class_name.to_s.classify.constantize
+    end
+    
     def worker
-      worker_class.new
+      worker_class_name.new
     end
     
     def worker_count
