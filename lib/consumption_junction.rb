@@ -11,4 +11,4 @@ require "#{File.dirname(__FILE__)}/consumption_junction/queue_listener"
 require "#{File.dirname(__FILE__)}/consumption_junction/server"
 require "#{File.dirname(__FILE__)}/consumption_junction/version"
 require "#{File.dirname(__FILE__)}/consumption_junction/worker_config"
-
+require "#{File.dirname(__FILE__)}/consumption_junction/em_worker_subscription"

@@ -1,63 +1,45 @@
-class ConsumptionJunction::EmRunner
-  include Celluloid
-  
-  WORKER_COUNT = 5
-  MESSAGE_COUNT = 100
-  QUEUE_NAME = 'foo.bar.baz'
-  
-  attr_accessor :amqp_connection, :em_thread, :server_config
+module ConsumptionJunction
+  class EmRunner
+    include Celluloid
 
-  def initialize (server_config)
-    @server_config = server_config
-  end
-  
-  def start
-    EventMachine.run do
-      setup_connection
-      create_subscriptions
+    attr_accessor :server_config
+
+    def initialize (server_config)
+      @server_config = server_config
+      @subscriptions = []
     end
-  end
-  
-  def setup_connection
-    self.amqp_connection = AMQP.connect(:host => '127.0.0.1')
-  end
-  
-  def create_subscriptions
-    worker_configs.each do |worker_config|
-      puts "Setting up subcriptions for #{worker_config}"
-      worker_config.worker_count.times do
-        
-        message_processor_supervisor = ConsumptionJunction::MessageProcessor.supervise(worker_config.worker_class.to_s.classify.constantize)
-        
-        channel = AMQP::Channel.new(amqp_connection)
-        channel.prefetch(1)
-        queue = channel.queue(worker_config.queue, :durable => true)
 
-        queue.subscribe(:ack => worker_config.ack) do |header, payload|
-
-          operation = lambda do
-            begin
-              message_processor_supervisor.actor.process_message(payload)
-            rescue Exception => e
-              puts e.message
-              puts e.backtrace
-              "FAILED"
-            end
-          end
-
-          callback = lambda do |result|
-            result == "SUCCEEDED" ? header.ack : header.reject(:requeue => worker_config.requeue_on_failure)
-          end
-
-          EventMachine.defer(operation, callback)
-        end
+    def start
+      EventMachine.run do
+        create_subscriptions
       end
     end
+
+    def amqp_connection
+      @amqp_connection ||= AMQP.connect(:host => '127.0.0.1')
+    end
     
-    puts "END: #create_subscriptions"
-  end
-  
-  def worker_configs
-    server_config.worker_configs
+    def channel
+      return @channel if @channel
+      @channel = AMQP::Channel.new(amqp_connection)
+      @channel
+    end
+
+    def create_subscriptions
+      worker_configs.each do |worker_config|
+        puts "Setting up subcriptions for #{worker_config}"
+        worker_config.worker_count.times do
+          EmWorkerSubscription.create_subscription(channel, worker_config)
+        end
+      end
+
+      puts "END: #create_subscriptions"
+    end
+
+    private
+
+    def worker_configs
+      server_config.worker_configs
+    end
   end
 end
