@@ -30,6 +30,9 @@ module ConsumptionJunction
     def worker_count
       options[:count]
     end
-        
+    
+    def to_s
+      "#<ConsumptionJunction::WorkerConfig: worker_class_name = #{worker_class_name}, queue = #{queue}, worker_count = #{worker_count}"
+    end
   end
 end
